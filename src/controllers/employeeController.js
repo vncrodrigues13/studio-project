@@ -5,7 +5,6 @@ const employeeModel = require('../models/EmployeeModel')
 
 module.exports = app => {
     app.get('/employee', (request, response) => {
-        console.log(request)
         employeeModel.selectAll(response)
         response.setHeader('Access-Control-Allow-Origin', '*');
         response.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
@@ -15,7 +14,6 @@ module.exports = app => {
     })
 
     app.post('/employee', (request, response) => {
-        console.log(request.body)
         response.setHeader('Access-Control-Allow-Origin', '*');
         response.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
         response.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
