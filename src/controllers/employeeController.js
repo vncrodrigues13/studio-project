@@ -1,27 +1,36 @@
 const { response, request } = require("express")
 const dbconnection = require('../infra/dbconnection')
+const addressModel = require('../models/AddressModel')
 const employeeModel = require('../models/EmployeeModel')
 
 module.exports = app => {
-    app.get('/employee', (request, response )=> {
-        dbconnection.query('select * from employee', (error, results) => {
-            if (error) {
-                return response.status(404).json({"error": error})
-            } else {
-                return response.status(200).json(results)
-            }
-        })
+    app.get('/employee', (request, response) => {
+        console.log(request)
+        employeeModel.selectAll(response)
+        response.setHeader('Access-Control-Allow-Origin', '*');
+        response.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+        response.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+        response.setHeader('Access-Control-Allow-Credentials', true); // If needed
+        return response
     })
 
     app.post('/employee', (request, response) => {
-        const employee = request.body
-        try{
-
-            employeeModel.addEmployee(employee)
-            return response.status(200).json(employee)
-        }catch(error){
-            return response.status(404).json({"error": error})
+        console.log(request.body)
+        response.setHeader('Access-Control-Allow-Origin', '*');
+        response.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+        response.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+        response.setHeader('Access-Control-Allow-Credentials', true); // If needed
+        const rawEmployee = request.body
+        const employee = {
+            "id": rawEmployee.id,
+            "name": rawEmployee.name,
+            "birth_date": rawEmployee.birth_date,
+            "email": rawEmployee.email,
+            "phone": rawEmployee.phone
         }
-        
+        employeeModel.addEmployee(employee, response)
+        const addressToAdd = rawEmployee.address
+        addressModel.addAddress(addressToAdd)
+        return response
     })
 }

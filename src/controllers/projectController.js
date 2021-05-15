@@ -7,23 +7,14 @@ module.exports = app => {
 
 
     app.get('/projects', (request,response) => {
-
-        dbconnection.query('select * from project',[], (error, results) => {
-            if (error) {
-                return response.status(404).json({"error": error})
-            } else {
-                return response.status(200).json(results)
-            }
-        })
+        projectModel.selectAll(response)
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        return response
     })
 
     app.post('/projects', (request,response) => {
         const project = request.body
-        try{
-            projectModel.addProject(project)
-            return response.status(200).json(project)
-        }catch(error){
-            return response.status(404).json({"error": error})
-        }
+        projectModel.addProject(project,response)
+        return response
     })
 }
