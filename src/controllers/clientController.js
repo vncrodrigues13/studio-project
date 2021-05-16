@@ -4,7 +4,7 @@ const dbconnection = require('../infra/dbconnection')
 const addressModel = require('../models/AddressModel')
 module.exports = app => {
 
-    app.get('/client', (request,response)=>{ 
+    app.get('/client', (request, response) => {
         clientModel.selectAll(response)
         response.setHeader('Access-Control-Allow-Origin', '*');
         response.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
@@ -13,7 +13,7 @@ module.exports = app => {
         return response
     })
 
-    app.post('/client', (request,response) => {
+    app.post('/client', (request, response) => {
         const rawClient = request.body
         response.setHeader('Access-Control-Allow-Origin', '*');
         response.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
@@ -26,10 +26,10 @@ module.exports = app => {
             "style_music": rawClient.style_music,
             "email": rawClient.email
         }
-        clientModel.addClient(client,response)
+        clientModel.addClient(client, response)
         const addressToAdd = rawClient.address
         addressModel.addAddress(addressToAdd)
         return response
-        
+
     })
 }
